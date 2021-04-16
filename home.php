@@ -30,6 +30,21 @@ if (isset($_POST["email"])) {
 if (isset($_POST["chi"])) {
     $chi = $_POST["chi"];
 }
+
+if (isset($_POST["dr"]) && isset($_POST["address"]) && isset($_POST["date"]) && isset($_POST["time"]) && isset($_POST["fullName"]) && isset($_POST["email"])) {
+    sendEmail($dr, $date, $time, $fullName, $email);
+}
+
+function sendEmail($dr, $date, $time, $fullName, $email)
+{
+    if (is_null($date) && is_null($time) && is_null($fullName) && is_null($email)) {
+    } else {
+        $message = "Hi $fullName, thank you so much for booking!\n\n Your appointment with $dr is confirmed for $date at $time.\n\n We look forward to seeing you then.";
+    }
+
+    // send email
+    mail("$email", "Appointment Confirmation", $message);
+}
 ?>
 
 <!DOCTYPE html>
@@ -190,7 +205,7 @@ if (isset($_POST["chi"])) {
 
             <div class="modal-footer">
                 <text style="font-size: small">Didn't receive an email?</text>
-                <button type="button" class="btn btn-block btn-danger">Resend Email</button>
+                <button type="button" class="btn btn-block btn-danger" onclick="<?php sendEmail($dr, $date, $time, $fullName, $email); ?>">Resend Email</button>
             </div>
         </div>
     </div>
