@@ -1,10 +1,18 @@
 <?php
+$dr = null;
+$address = null;
 $date = null;
 $time = null;
 $fullName = null;
 $email = null;
 $chi = null;
 
+if(isset($_POST["dr"])) {
+    $dr = $_POST["dr"];
+}
+if(isset($_POST["address"])) {
+    $address = $_POST["address"];
+}
 if (isset($_POST["date"])) {
     $date = $_POST["date"];
 }
@@ -118,6 +126,8 @@ if (isset($_POST["chi"])) {
                             </div>
                             <div class="form-group">
                                 <label for="time">Select a timeslot*</label>
+                                <input type="hidden" name="dr" id="dr">
+                                <input type="hidden" name="address" id="address">
                                 <input type="time" name="time" class="form-control" id="time" required>
                                 <div class="invalid-feedback">
                                     Please choose a time.

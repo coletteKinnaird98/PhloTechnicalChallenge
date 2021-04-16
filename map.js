@@ -56,8 +56,8 @@ function handleLocationError(browserHasGeolocation, infoWindow) {
     // Display an InfoWindow at the map center
     infoWindow.setPosition(pos);
     infoWindow.setContent(browserHasGeolocation ?
-    'Geolocation permissions denied. Using default location.' :
-    'Error: Your browser does not support geolocation.');
+        'Geolocation permissions denied. Using default location.' :
+        'Error: Your browser does not support geolocation.');
     infoWindow.open(map);
     currentInfoWindow = infoWindow;
     getNearbyPlaces(pos);
@@ -121,13 +121,13 @@ function showDetails(placeResult, marker, status) {
         let placeInfowindow = new google.maps.InfoWindow();
         placeInfowindow.setContent('' +
             '<div class="bg-light" style="max-width: 400px">' +
-                '<img src="male-doctor.png"/>    <strong style="font-size: medium"><b>' + placeName + '</b></strong>' +
-                '<br><br>' +
-                '<ul>' +
-                    '<li>' + placeResult.formatted_address + '</li><br>' +
-                    '<li>Hi, we are ' + placeName + ' and we would love to help you out with your medical needs!</li>' +
-                '</ul>' +
-                '<button type="button" class="btn btn-danger btn-block" onclick="' + informModal(placeResult) + '" data-toggle="modal" data-target="#bookingModal"> Book an Appointment </button>' +
+            '<img src="male-doctor.png"/>    <strong style="font-size: medium"><b>' + placeName + '</b></strong>' +
+            '<br><br>' +
+            '<ul>' +
+            '<li>' + placeResult.formatted_address + '</li><br>' +
+            '<li>Hi, we are ' + placeName + ' and we would love to help you out with your medical needs!</li>' +
+            '</ul>' +
+            '<button type="button" class="btn btn-danger btn-block" onclick="' + informModal(placeResult) + '" data-toggle="modal" data-target="#bookingModal"> Book an Appointment </button>' +
             '</div>')
         placeInfowindow.open(marker.map, marker);
         currentInfoWindow.close();
@@ -147,6 +147,9 @@ function informModal(placeResults) {
     } else {
         document.getElementById('rating').innerHTML = "Rated " + placeResults.rating + " based on " + placeResults.user_ratings_total + " reviews.";
     }
+
+    document.getElementById('dr').value = placeResults.name;
+    document.getElementById('address').value = placeResults.formatted_address;
 
     setDoc(placeResults)
 }
