@@ -1,11 +1,10 @@
+// Declare global variables
 let pos;
 let map;
 let bounds;
 let infoWindow;
 let currentInfoWindow;
 let service;
-let docName;
-let docAddress;
 
 function initMap() {
     // Initialize variables
@@ -39,15 +38,15 @@ function initMap() {
             handleLocationError(true, infoWindow);
         });
     } else {
-        // Browser doesn't support geolocation
+        // Browser does not support geolocation
         handleLocationError(false, infoWindow);
     }
 }
 
 // Handle a geolocation error
 function handleLocationError(browserHasGeolocation, infoWindow) {
-    // Set default location to Sydney, Australia
-    pos = {lat: -33.856, lng: 151.215};
+    // Set default location to London, UK
+    pos = {lat: 51.509865, lng: -0.118092};
     map = new google.maps.Map(document.getElementById('map'), {
         center: pos,
         zoom: 15
@@ -64,6 +63,7 @@ function handleLocationError(browserHasGeolocation, infoWindow) {
 }
 
 function getNearbyPlaces(position) {
+    // Find doctors near user geolocation
     let request = {
         location: position,
         rankBy: google.maps.places.RankBy.DISTANCE,
@@ -73,14 +73,14 @@ function getNearbyPlaces(position) {
     service.nearbySearch(request, nearbyCallback);
 }
 
-// Handle the results (up to 20) of the Nearby Search
+// Handle the results of search for nearby doctors
 function nearbyCallback(results, status) {
     if (status == google.maps.places.PlacesServiceStatus.OK) {
         createMarkers(results);
     }
 }
 
-// Set markers at the location of each place result
+// Set icon marker at the location of each doctor
 function createMarkers(places) {
     places.forEach(place => {
         let marker = new google.maps.Marker({
@@ -98,36 +98,33 @@ function createMarkers(places) {
                     'user_ratings_total']
             };
 
-            /* Only fetch the details of a place when the user clicks on a marker.
-            * If we fetch the details for all place results as soon as we get
-            * the search response, we will hit API rate limits. */
-            service.getDetails(request, (placeResult, status) => {
+            // fetch the details of a doctor when the user clicks on a marker
+                service.getDetails(request, (placeResult, status) => {
                 showDetails(placeResult, marker, status)
             });
         });
 
-        // Adjust the map bounds to include the location of this marker
+        // Adjust the map bounds to include the location of marker
         bounds.extend(place.geometry.location);
     });
-    /* Once all the markers have been placed, adjust the bounds of the map to
-    * show all the markers within the visible area. */
+    // Once all the markers have been placed, map bounds to show all markers within visible area.
     map.fitBounds(bounds);
 }
 
-// Builds an InfoWindow to display details above the marker
+// Builds InfoWindow to display doctor details on marker click
 function showDetails(placeResult, marker, status) {
-    let placeName = placeResult.name;
+    let doctorName = placeResult.name;
     if (status == google.maps.places.PlacesServiceStatus.OK) {
         let placeInfowindow = new google.maps.InfoWindow();
         placeInfowindow.setContent('' +
             '<div class="bg-light" style="max-width: 400px">' +
-            '<img src="male-doctor.png"/>    <strong style="font-size: medium"><b>' + placeName + '</b></strong>' +
+            '<img src="male-doctor.png"/>    <strong style="font-size: medium"><b>' + doctorName + '</b></strong>' +
             '<br><br>' +
             '<ul>' +
             '<li>' + placeResult.formatted_address + '</li><br>' +
-            '<li>Hi, we are ' + placeName + ' and we would love to help you out with your medical needs!</li>' +
+            '<li>Hi, we are ' + doctorName + ' and we would love to help you out with your medical needs!</li>' +
             '</ul>' +
-            '<button type="button" class="btn btn-danger btn-block" onclick="' + informModal(placeResult) + '" data-toggle="modal" data-target="#bookingModal"> Book an Appointment </button>' +
+            '<button type="button" class="btn btn-danger btn-block" onclick="' + openBookingForm(placeResult) + '" data-toggle="modal" data-target="#bookingModal"> Book an Appointment </button>' +
             '</div>')
         placeInfowindow.open(marker.map, marker);
         currentInfoWindow.close();
@@ -138,7 +135,8 @@ function showDetails(placeResult, marker, status) {
     }
 }
 
-function informModal(placeResults) {
+// Opens bootstrap modal containing booking form and fills out doctor details (name, address, rating) within left column of modal
+function openBookingForm(placeResults) {
     document.getElementById('drName').innerHTML = placeResults.name;
     document.getElementById('address').innerHTML = placeResults.formatted_address;
     document.getElementById('description').innerHTML = placeResults.name;
@@ -148,23 +146,12 @@ function informModal(placeResults) {
         document.getElementById('rating').innerHTML = "Rated " + placeResults.rating + " based on " + placeResults.user_ratings_total + " reviews.";
     }
 
-    document.getElementById('dr').value = placeResults.name;
-    document.getElementById('address').value = placeResults.formatted_address;
-
-    setDoc(placeResults)
+    // Sets hidden form field values
+    document.getElementById('drForm').value = placeResults.name;
+    document.getElementById('addressForm').value = placeResults.formatted_address;
 }
 
-function setDoc(placeResults){
-    docName = placeResults.name;
-    docAddress = placeResults.formatted_address;
-}
-
-function bookingFormSubmit() {
-
-}
-
-function showModal() {
-    document.getElementById('confirmedDrName').innerHTML = docName;
-    document.getElementById('confirmedAddress').innerHTML = docAddress;
+// Opens bootstrap modal confirming user booking
+function openBookingConfirmation() {
     $("#confirmationModal").modal('show');
 }

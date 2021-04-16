@@ -1,4 +1,5 @@
 <?php
+// Declare variables
 $dr = null;
 $address = null;
 $date = null;
@@ -7,6 +8,7 @@ $fullName = null;
 $email = null;
 $chi = null;
 
+// Set variables to $_POST values if set
 if(isset($_POST["dr"])) {
     $dr = $_POST["dr"];
 }
@@ -62,10 +64,10 @@ if (isset($_POST["chi"])) {
 <body>
 <div class="container-fluid">
     <nav class="navbar navbar-expand-sm bg-light navbar-light fixed-top">
-        <a class="navbar-brand"><img src="cross.png" alt="Logo" width="35"> Doc.ly</a>
+        <a class="navbar-brand" href="home.php"><img src="cross.png" alt="Logo" width="35"> Doc.ly</a>
         <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="#">Find a Doctor</a>
+                <a class="nav-link" href="home.php">Find a Doctor</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Services</a>
@@ -126,8 +128,8 @@ if (isset($_POST["chi"])) {
                             </div>
                             <div class="form-group">
                                 <label for="time">Select a timeslot*</label>
-                                <input type="hidden" name="dr" id="dr">
-                                <input type="hidden" name="address" id="address">
+                                <input type="hidden" name="dr" id="drForm">
+                                <input type="hidden" name="address" id="addressForm">
                                 <input type="time" name="time" class="form-control" id="time" required>
                                 <div class="invalid-feedback">
                                     Please choose a time.
@@ -175,9 +177,9 @@ if (isset($_POST["chi"])) {
             <div class="modal-body">
                 <b>Thanks, you've made a booking with...</b>
                 <br><br>
-                <img src="male-doctor.png"/> <strong id="confirmedDrName" style="font-size: large"></strong><br><br>
+                <img src="male-doctor.png"/> <strong id="confirmedDrName" style="font-size: large"><?php echo $dr ?></strong><br><br>
                 <ul>
-                    <li id="confirmedAddress"></li>
+                    <li id="confirmedAddress"><?php echo $address ?></li>
                     <br>
                     <li><?php echo $date ?></li>
                     <br>
@@ -197,10 +199,11 @@ if (isset($_POST["chi"])) {
 <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAV-SC7iaV3XlcBzpxIrDGRdqPLoVi_cUA&libraries=places&callback=initMap"></script>
 <?php
+// If $_POST values received from server, display confirmation modal
 if (is_null($date) && is_null($time) && is_null($fullName) && is_null($email)) {
     echo "";
 } else {
-    echo '<script type="text/javascript">showModal()</script>';
+    echo '<script type="text/javascript">openBookingConfirmation()</script>';
 }
 ?>
 </body>
