@@ -55,7 +55,9 @@ function handleLocationError(browserHasGeolocation, infoWindow) {
     // Display an InfoWindow at the map center
     infoWindow.setPosition(pos);
     infoWindow.setContent(browserHasGeolocation ?
+        // Displays if browser supports geolocation, but user has denied permission (browserHasGeolocation == true)
         'Geolocation permissions denied. Using default location.' :
+        // Displays if browser does not support geolocation (browserHasGeolocation == false)
         'Error: Your browser does not support geolocation.');
     infoWindow.open(map);
     currentInfoWindow = infoWindow;
@@ -73,7 +75,7 @@ function getNearbyPlaces(position) {
     service.nearbySearch(request, nearbyCallback);
 }
 
-// Handle the results of search for nearby doctors
+// Handle the results of search for nearby doctors returning an array of PlaceResult objects
 function nearbyCallback(results, status) {
     if (status == google.maps.places.PlacesServiceStatus.OK) {
         createMarkers(results);
@@ -129,7 +131,6 @@ function showDetails(placeResult, marker, status) {
         placeInfowindow.open(marker.map, marker);
         currentInfoWindow.close();
         currentInfoWindow = placeInfowindow;
-        showPanel(placeResult);
     } else {
         console.log('showDetails failed: ' + status);
     }
