@@ -1,5 +1,5 @@
 <?php
-    define('DB_SERVER', 'devweb2020.cis.strathac.uk');
+    define('DB_SERVER', 'devweb2020.cis.strath.ac.uk');
     define('DB_USERNAME', '********');
     define('DB_PASSWORD', '********');
     define('DB_DATABASE', '********');
