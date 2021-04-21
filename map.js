@@ -153,5 +153,5 @@ function openBookingForm(placeResults) {
 
 // Opens bootstrap modal confirming user booking
 function openBookingConfirmation() {
-    $("#confirmationModal").modal('show');
+    document.getElementById('confirmationModal').showModal();
 }
