@@ -52,8 +52,7 @@ if (isset($dr) && isset($address) && isset($date) && isset($time) && isset($full
 
 function sendEmail($dr, $date, $time, $fullName, $email)
 {
-    if (is_null($date) && is_null($time) && is_null($fullName) && is_null($email)) {
-    } else {
+    if (!is_null($date) && !is_null($time) && !is_null($fullName) && !is_null($email)) {
         $message = "Hi $fullName, thank you so much for booking!\n\n Your appointment with $dr is confirmed for $date at $time.\n\n We look forward to seeing you then.";
     }
 
@@ -230,9 +229,7 @@ function sendEmail($dr, $date, $time, $fullName, $email)
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAV-SC7iaV3XlcBzpxIrDGRdqPLoVi_cUA&libraries=places&callback=initMap"></script>
 <?php
 // If $_POST values received from server, display confirmation modal
-if (is_null($date) && is_null($time) && is_null($fullName) && is_null($email)) {
-    echo "";
-} else {
+if (!is_null($date) && !is_null($time) && !is_null($fullName) && !is_null($email)) {
     echo '<script type="text/javascript">openBookingConfirmation()</script>';
 }
 ?>
