@@ -31,7 +31,22 @@ if (isset($_POST["chi"])) {
     $chi = $_POST["chi"];
 }
 
-if (isset($_POST["dr"]) && isset($_POST["address"]) && isset($_POST["date"]) && isset($_POST["time"]) && isset($_POST["fullName"]) && isset($_POST["email"])) {
+if (isset($dr) && isset($address) && isset($date) && isset($time) && isset($fullName) && isset($email)) {
+    /*
+    require_once "configure.php";
+
+    if (!$db) {
+        die("Connection Failed: " . mysqli_connect_error());
+    } else {
+        if(isset($chi)) {
+            $sql = "INSERT INTO appointments ('appointment_id', 'dr_name', 'date', 'time', 'patient_name', 'patient_email', 'patient_chi') VALUES (NULL, '$dr', '$address', '$fullName', '$email', '$chi')";
+        } else {
+            $sql = "INSERT INTO appointments ('appointment_id', 'dr_name', 'date', 'time', 'patient_name', 'patient_email', 'patient_chi') VALUES (NULL, '$dr', '$address', '$fullName', '$email', NULL)";
+        }
+        mysqli_query($db, $sql);
+        mysqli_close($db);
+    }
+    */
     sendEmail($dr, $date, $time, $fullName, $email);
 }
 
