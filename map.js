@@ -6,6 +6,7 @@ let infoWindow;
 let currentInfoWindow;
 let service;
 
+// Creates map, sets bounds and attempts to get users geolocation
 function initMap() {
     // Initialize variables
     bounds = new google.maps.LatLngBounds();
@@ -64,6 +65,7 @@ function handleLocationError(browserHasGeolocation, infoWindow) {
     getNearbyPlaces(pos);
 }
 
+// Creates a request to the Places service to find doctors near users geolocation
 function getNearbyPlaces(position) {
     // Find doctors near user geolocation
     let request = {
@@ -82,7 +84,7 @@ function nearbyCallback(results, status) {
     }
 }
 
-// Set icon marker at the location of each doctor
+// Set icon marker at the location of each doctor and add click listeners to each marker
 function createMarkers(places) {
     places.forEach(place => {
         let marker = new google.maps.Marker({
@@ -94,13 +96,14 @@ function createMarkers(places) {
 
         // Add click listener to each marker
         google.maps.event.addListener(marker, 'click', () => {
+            // Fetch the details of a doctor when the user clicks on a marker
             let request = {
                 placeId: place.place_id,
                 fields: ['name', 'types', 'formatted_address', 'geometry', 'rating',
                     'user_ratings_total']
             };
 
-            // fetch the details of a doctor when the user clicks on a marker
+            // Display the details of a doctor when the user clicks on a marker
                 service.getDetails(request, (placeResult, status) => {
                 showDetails(placeResult, marker, status)
             });
@@ -136,7 +139,7 @@ function showDetails(placeResult, marker, status) {
     }
 }
 
-// Opens bootstrap modal containing booking form and fills out doctor details (name, address, rating) within left column of modal
+// Opens bootstrap modal containing booking form and sends doctor details to the modal (name, address, rating) within left column of modal
 function openBookingForm(placeResults) {
     document.getElementById('drName').innerHTML = placeResults.name;
     document.getElementById('address').innerHTML = placeResults.formatted_address;
@@ -154,5 +157,6 @@ function openBookingForm(placeResults) {
 
 // Opens bootstrap modal confirming user booking
 function openBookingConfirmation() {
-    document.getElementById('confirmationModal').showModal();
+    $('#confirmationModal').modal('show');
+    //document.getElementById('confirmationModal').showModal();
 }
